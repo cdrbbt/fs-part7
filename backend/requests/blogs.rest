@@ -1,0 +1,24 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNqYWNrIiwiaWQiOiI2MDIzZWY3MDU5ODIyZTVhMTA3NmZkYWYiLCJpYXQiOjE2MTI5NzE2MjF9.vk_CYnHSKB8BUQexqjKWUNQkJOc6xCoRycIeM29VzXg
+
+{
+  "title": "Auth test",
+  "author": "me",
+  "url": "valid url",
+  "likes": "3"
+}
+
+###
+GET http://localhost:3003/api/blogs
+
+###
+DELETE http://localhost:3003/api/blogs/602400e2e995c966b04174dc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNqYWNrIiwiaWQiOiI2MDIzZWY3MDU5ODIyZTVhMTA3NmZkYWYiLCJpYXQiOjE2MTI5NzE2MjF9.vk_CYnHSKB8BUQexqjKWUNQkJOc6xCoRycIeM29VzXg
+###
+PUT http://localhost:3003/api/blogs/6021656181aa3603906178f3
+Content-Type: application/json
+
+{
+  "likes": 3
+}
