@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Blog from './components/Blog'
 import Login from './components/Login'
 import Notification from './components/Notification'
@@ -7,21 +7,19 @@ import blogService from './services/blogs'
 import BlogCreationFrom from './components/BlogCreationForm'
 import Toggleable from './components/Toggleable'
 import { changeNotification } from './reducers/notificationReducer'
-
+import { addBlog, initializeBlogs } from './reducers/blogsReducer'
 
 const App = () => {
 
   const noteToggle = useRef()
-  const [blogs, setBlogs] = useState([])
+  const blogs = useSelector(state => state.blogs)
   const [user, setUser] = useState(null)
 
   const dispatch = useDispatch()
 
   //blogs arent shown when not logged in but still loaded?
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs(blogs.sort((a, b) => b.likes - a.likes))
-    )
+    dispatch(initializeBlogs())
   }, [])
 
   useEffect(() => {
@@ -39,15 +37,11 @@ const App = () => {
   }
 
   //!!the response from blog creation returns a blog object with the user field not populated
-  const createBlog = async (blog) => {
-    try {
-      const data = await blogService.create(blog)
-      dispatch(changeNotification(`Blog ${data.title} by ${data.author} created`))
-      setBlogs(blogs.concat(data))
-      noteToggle.current.toggleVisibility()
-    } catch (e) {
-      dispatch(changeNotification(`Error: ${e.response.data.error}`))
-    }
+  const createBlog = (blog) => {
+    dispatch(addBlog(blog))
+    dispatch(changeNotification(`Blog ${blog.title} by ${blog.author} created`))
+    //setBLogs(blogs.concat(data))
+    noteToggle.current.toggleVisibility()
   }
 
   const updateBlog = async(blog) => {
@@ -67,7 +61,7 @@ const App = () => {
 
       //blogs jump after like update due to sorting
       const updatedBlogs = blogs.filter(b => b.id !== blog.id).concat(newBlog)
-      setBlogs(updatedBlogs.sort((a,b) => b.likes - a.likes))
+      //setBLogs(updatedBlogs.sort((a,b) => b.likes - a.likes))
     } catch (e) {
       console.log(e)
       dispatch(changeNotification(`Error: ${e.response.data.error}`))
@@ -81,7 +75,7 @@ const App = () => {
         await blogService.remove(blog)
         dispatch(changeNotification('Blog deleted'))
 
-        setBlogs(blogs.filter(b => b.id !==blog.id))
+        //setBLogs(blogs.filter(b => b.id !==blog.id))
       } catch (e) {
         console.log(e)
         dispatch(changeNotification(`Error: ${e.response.data.error}`))
