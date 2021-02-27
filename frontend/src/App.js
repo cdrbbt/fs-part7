@@ -1,17 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { useDispatch } from 'react-redux'
 import Blog from './components/Blog'
 import Login from './components/Login'
 import Notification from './components/Notification'
 import blogService from './services/blogs'
 import BlogCreationFrom from './components/BlogCreationForm'
 import Toggleable from './components/Toggleable'
+import { changeNotification } from './reducers/notificationReducer'
+
 
 const App = () => {
 
   const noteToggle = useRef()
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-  const [message, setMessage] = useState(null)
+
+  const dispatch = useDispatch()
 
   //blogs arent shown when not logged in but still loaded?
   useEffect(() => {
@@ -38,13 +42,11 @@ const App = () => {
   const createBlog = async (blog) => {
     try {
       const data = await blogService.create(blog)
-      setMessage(`Blog ${data.title} by ${data.author} created`)
-      setTimeout(() => setMessage(null), 5000)
+      dispatch(changeNotification(`Blog ${data.title} by ${data.author} created`))
       setBlogs(blogs.concat(data))
       noteToggle.current.toggleVisibility()
     } catch (e) {
-      setMessage(`Error: ${e.response.data.error}`)
-      setTimeout(() => setMessage(null), 5000)
+      dispatch(changeNotification(`Error: ${e.response.data.error}`))
     }
   }
 
@@ -68,8 +70,8 @@ const App = () => {
       setBlogs(updatedBlogs.sort((a,b) => b.likes - a.likes))
     } catch (e) {
       console.log(e)
-      setMessage(`Error: ${e.response.data.error}`)
-      setTimeout(() => setMessage(null), 5000)
+      dispatch(changeNotification(`Error: ${e.response.data.error}`))
+
     }
   }
 
@@ -77,20 +79,18 @@ const App = () => {
     if (window.confirm(`Delete blog ${blog.title}?`)){
       try {
         await blogService.remove(blog)
-        setMessage('Blog deleted')
-        setTimeout(() => setMessage(null), 5000)
+        dispatch(changeNotification('Blog deleted'))
+
         setBlogs(blogs.filter(b => b.id !==blog.id))
       } catch (e) {
         console.log(e)
-        setMessage(`Error: ${e.response.data.error}`)
-        setTimeout(() => setMessage(null), 5000)
+        dispatch(changeNotification(`Error: ${e.response.data.error}`))
       }
     }
   }
 
   const login = () => (
     <Login
-      setMessage={setMessage}
       setUser={setUser}
     />
   )
@@ -117,7 +117,7 @@ const App = () => {
 
   return (
     <div>
-      <Notification message={message}/>
+      <Notification />
       {user === null
         ? login()
         : blog()
