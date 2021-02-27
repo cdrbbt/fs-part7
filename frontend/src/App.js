@@ -40,47 +40,7 @@ const App = () => {
   const createBlog = (blog) => {
     dispatch(addBlog(blog))
     dispatch(changeNotification(`Blog ${blog.title} by ${blog.author} created`))
-    //setBLogs(blogs.concat(data))
     noteToggle.current.toggleVisibility()
-  }
-
-  const updateBlog = async(blog) => {
-
-    //server should ignore everything but the likes field, but following insturctions just in case
-    //once again updating a blog returns a blog with an unpopulated user field
-    const updatedBlog = {
-      user: blog.user.id,
-      likes: blog.likes + 1,
-      author: blog.author,
-      title: blog.title,
-      url: blog.url,
-      id: blog.id
-    }
-    try {
-      const newBlog = await blogService.update(updatedBlog)
-
-      //blogs jump after like update due to sorting
-      const updatedBlogs = blogs.filter(b => b.id !== blog.id).concat(newBlog)
-      //setBLogs(updatedBlogs.sort((a,b) => b.likes - a.likes))
-    } catch (e) {
-      console.log(e)
-      dispatch(changeNotification(`Error: ${e.response.data.error}`))
-
-    }
-  }
-
-  const deleteBlog = async (blog) => {
-    if (window.confirm(`Delete blog ${blog.title}?`)){
-      try {
-        await blogService.remove(blog)
-        dispatch(changeNotification('Blog deleted'))
-
-        //setBLogs(blogs.filter(b => b.id !==blog.id))
-      } catch (e) {
-        console.log(e)
-        dispatch(changeNotification(`Error: ${e.response.data.error}`))
-      }
-    }
   }
 
   const login = () => (
@@ -102,7 +62,7 @@ const App = () => {
       <h2>blogs</h2>
       <div id="blogs">
         {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} updateBlog={updateBlog} deleteBlog={deleteBlog}/>
+          <Blog key={blog.id} blog={blog}/>
         )}
       </div>
 
