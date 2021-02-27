@@ -1,39 +1,34 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Blog from './components/Blog'
 import Login from './components/Login'
 import Notification from './components/Notification'
-import blogService from './services/blogs'
 import BlogCreationFrom from './components/BlogCreationForm'
 import Toggleable from './components/Toggleable'
 import { changeNotification } from './reducers/notificationReducer'
 import { addBlog, initializeBlogs } from './reducers/blogsReducer'
+import { checkLocal, logout } from './reducers/userReducer'
 
 const App = () => {
 
   const noteToggle = useRef()
-  const blogs = useSelector(state => state.blogs)
-  const [user, setUser] = useState(null)
+  const [blogs, user] = useSelector(state => [state.blogs, state.user])
 
   const dispatch = useDispatch()
 
   //blogs arent shown when not logged in but still loaded?
   useEffect(() => {
+    console.log('pre dispatch')
     dispatch(initializeBlogs())
+    console.log('post dispatch')
   }, [])
 
   useEffect(() => {
-    const savedUser = window.localStorage.getItem('user')
-    if (savedUser) {
-      const loggedInUser = JSON.parse(savedUser)
-      blogService.setToken(loggedInUser.token)
-      setUser(loggedInUser)
-    }
+    dispatch(checkLocal())
   }, [])
 
-  const logout = () => {
-    window.localStorage.removeItem('user')
-    setUser(null)
+  const logoutUser = () => {
+    dispatch(logout())
   }
 
   //!!the response from blog creation returns a blog object with the user field not populated
@@ -44,14 +39,13 @@ const App = () => {
   }
 
   const login = () => (
-    <Login
-      setUser={setUser}
-    />
+    <Login />
   )
 
   const blog = () => (
     <>
-      <button onClick={logout}>Logout</button>
+      <div>{`${user.name} logged in`}</div>
+      <button onClick={logoutUser}>Logout</button>
       <Toggleable
         buttonLabel="new note"
         ref={noteToggle}>

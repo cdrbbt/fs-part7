@@ -11,6 +11,7 @@ const reducer = (state = defaultNotification, action) => {
 let currentTimeout = null
 
 export const changeNotification = (text) => {
+  console.log('dispatch')
   return dispatch => {
     dispatch({
       type: 'NOTIFY',

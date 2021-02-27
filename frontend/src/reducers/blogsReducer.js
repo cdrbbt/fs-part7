@@ -29,6 +29,7 @@ export const initializeBlogs = () => {
       type: 'INIT',
       blogs: sortBlogs(blogs)
     })
+    console.log('dispatch')
   }
 }
 
