@@ -8,6 +8,8 @@ import Toggleable from './components/Toggleable'
 import { changeNotification } from './reducers/notificationReducer'
 import { addBlog, initializeBlogs } from './reducers/blogsReducer'
 import { checkLocal, logout } from './reducers/userReducer'
+import { Switch, Link, Route } from 'react-router-dom'
+import Users from './components/Users'
 
 const App = () => {
 
@@ -16,16 +18,14 @@ const App = () => {
 
   const dispatch = useDispatch()
 
-  //blogs arent shown when not logged in but still loaded?
+  //blogs arent shown when not logged in but still loaded
   useEffect(() => {
-    console.log('pre dispatch')
     dispatch(initializeBlogs())
-    console.log('post dispatch')
-  }, [])
+  }, [dispatch])
 
   useEffect(() => {
     dispatch(checkLocal())
-  }, [])
+  }, [dispatch])
 
   const logoutUser = () => {
     dispatch(logout())
@@ -46,19 +46,26 @@ const App = () => {
     <>
       <div>{`${user.name} logged in`}</div>
       <button onClick={logoutUser}>Logout</button>
-      <Toggleable
-        buttonLabel="new note"
-        ref={noteToggle}>
-        <BlogCreationFrom
-          createBlog={createBlog}
-        />
-      </Toggleable>
-      <h2>blogs</h2>
-      <div id="blogs">
-        {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog}/>
-        )}
-      </div>
+      <Switch>
+        <Route path='/users'>
+          <Users/>
+        </Route>
+        <Route path='/'>
+          <Toggleable
+            buttonLabel="new note"
+            ref={noteToggle}>
+            <BlogCreationFrom
+              createBlog={createBlog}
+            />
+          </Toggleable>
+          <h2>blogs</h2>
+          <div id="blogs">
+            {blogs.map(blog =>
+              <Blog key={blog.id} blog={blog}/>
+            )}
+          </div>
+        </Route>
+      </Switch>
 
     </>
   )
