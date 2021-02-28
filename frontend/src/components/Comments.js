@@ -1,3 +1,4 @@
+import { Button, TextField } from '@material-ui/core'
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { commentBlog } from '../reducers/blogsReducer'
@@ -16,8 +17,9 @@ const Comments = ({ blog }) => {
 
   return (
     <div>
-      <input onChange={change} value={comment}/>
-      <button onClick={send}>send</button>
+      <h3>Comments</h3>
+      <TextField onChange={change} value={comment}/>
+      <Button onClick={send} color='primary'>send</Button>
       <ul>
         {blog.comments.map( c => <li key={c}>{c}</li>)}
       </ul>

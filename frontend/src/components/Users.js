@@ -1,3 +1,4 @@
+import { Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core'
 import React from 'react'
 import { Link } from 'react-router-dom'
 const Users = ({ users }) => {
@@ -8,21 +9,21 @@ const Users = ({ users }) => {
   return(
     <div>
       <h2>Users</h2>
-      <table>
-        <thead>
-          <tr>
-            <td>User</td>
-            <td>Blogs</td>
-          </tr>
-        </thead>
-        <tbody>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>User</TableCell>
+            <TableCell>Blogs</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
           {users.map(user =>
-            <tr key={user.id}>
-              <td><Link to={`/users/${user.id}`}>{user.name}</Link></td>
-              <td>{user.blogs.length}</td>
-            </tr>)}
-        </tbody>
-      </table>
+            <TableRow key={user.id}>
+              <TableCell><Link to={`/users/${user.id}`}>{user.name}</Link></TableCell>
+              <TableCell>{user.blogs.length}</TableCell>
+            </TableRow>)}
+        </TableBody>
+      </Table>
     </div>
   )
 }

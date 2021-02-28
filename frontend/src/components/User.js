@@ -1,3 +1,4 @@
+import { List, ListItem, ListItemText, ListSubheader } from '@material-ui/core'
 import React from 'react'
 
 const User = ({ user }) => {
@@ -5,13 +6,15 @@ const User = ({ user }) => {
   return (
     <div>
       <h2>{user.name}</h2>
-      <h3>added blogs</h3>
-      <ul>
+      <List>
+        <ListSubheader>Added blogs</ListSubheader>
         {user.blogs.map(blog =>
-          <li key={blog.id}>
-            {blog.title}
-          </li>)}
-      </ul>
+          <ListItem key={blog.id}>
+            <ListItemText>
+              {blog.title}
+            </ListItemText>
+          </ListItem>)}
+      </List>
     </div>
   )
 }

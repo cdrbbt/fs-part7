@@ -8,12 +8,13 @@ import Toggleable from './components/Toggleable'
 import { changeNotification } from './reducers/notificationReducer'
 import { addBlog, initializeBlogs } from './reducers/blogsReducer'
 import { checkLocal, logout } from './reducers/userReducer'
-import { Switch, Link, Route, useRouteMatch } from 'react-router-dom'
+import { Switch, Route, useRouteMatch } from 'react-router-dom'
 import Users from './components/Users'
 import User from './components/User'
 import userService from './services/users'
 import BlogDetails from './components/BlogDetails'
 import Navigation from './components/Navigation'
+import { Button, Container, Table } from '@material-ui/core'
 
 const App = () => {
 
@@ -60,14 +61,16 @@ const App = () => {
   }
 
   const login = () => (
-    <Login />
+    <>
+      <Notification />
+      <Login />
+    </>
   )
 
   const blog = () => (
-    <>
-      <Navigation/>
-      <div>{`${user.name} logged in`}</div>
-      <button onClick={logoutUser}>Logout</button>
+    <Container>
+      <Navigation user={user} logout={logoutUser}/>
+      <Notification />
       <Switch>
         <Route path='/users/:id'>
           <User user={selectedUser}/>
@@ -79,28 +82,27 @@ const App = () => {
           <BlogDetails blog={ selectedBlog }/>
         </Route>
         <Route path='/'>
+          <h2>Blogs</h2>
           <Toggleable
-            buttonLabel="new note"
+            buttonLabel="Create Blog"
             ref={noteToggle}>
             <BlogCreationFrom
               createBlog={createBlog}
             />
           </Toggleable>
-          <h2>blogs</h2>
-          <div id="blogs">
+          <Table id="blogs">
             {blogs.map(blog =>
               <Blog key={blog.id} blog={blog}/>
             )}
-          </div>
+          </Table>
         </Route>
       </Switch>
 
-    </>
+    </Container>
   )
 
   return (
     <div>
-      <Notification />
       {user === null
         ? login()
         : blog()

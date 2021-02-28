@@ -1,3 +1,4 @@
+import { Button, List, TextField, ListItem } from '@material-ui/core'
 import React, { useState } from 'react'
 
 const BlogCreationFrom = ({ createBlog }) => {
@@ -17,39 +18,45 @@ const BlogCreationFrom = ({ createBlog }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div>
-        title:
-        <input
-          id="title"
-          type="text"
-          name="Title"
-          value={title}
-          onChange={({ target }) => setTitle(target.value)}
-        />
-      </div>
+      <List>
+        <ListItem>
+          <TextField
+            m={1}
+            id="title"
+            type="text"
+            label="Title"
+            value={title}
+            onChange={({ target }) => setTitle(target.value)}
+          />
 
-      <div>
-       author:
-        <input
-          id="author"
-          type="text"
-          name="Author"
-          value={author}
-          onChange={({ target }) => setAuthor(target.value)}
-        />
-      </div>
+        </ListItem>
 
-      <div>
-      url:
-        <input
-          id="url"
-          type="text"
-          name="Url"
-          value={url}
-          onChange={({ target }) => setUrl(target.value)}
-        />
-      </div>
-      <button type="submit" id="sendblog">send</button>
+
+        <ListItem>
+          <TextField
+            m={1}
+            id="author"
+            type="text"
+            label="Author"
+            value={author}
+            onChange={({ target }) => setAuthor(target.value)}
+          />
+        </ListItem>
+
+        <ListItem>
+          <TextField
+            m={1}
+            id="url"
+            type="text"
+            label="Url"
+            value={url}
+            onChange={({ target }) => setUrl(target.value)}
+          />
+        </ListItem>
+
+      </List>
+
+      <Button type="submit" id="sendblog" color='primary' variant='contained'>send</Button>
     </form>
   )
 }

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { logIn } from '../reducers/userReducer'
+import { Button, TextField } from '@material-ui/core'
 
 const Login = () => {
 
@@ -20,26 +21,26 @@ const Login = () => {
     <form onSubmit={handleLogin} id="loginform">
       <h2>Login</h2>
       <div>
-        username
-        <input
+        <TextField
           id="username"
           name="Username"
           value={userName}
           type="text"
+          label='Username'
           onChange={({ target }) => setUserName(target.value)}
         />
       </div>
       <div>
-        password
-        <input
+        <TextField
           id="password"
           name="Password"
           value={password}
           type="password"
+          label='Password'
           onChange={({ target }) => setPassword(target.value)}
         />
       </div>
-      <button type="submit" id="loginbutton">login</button>
+      <Button type="submit" id="loginbutton" color='primary' variant='contained'>login</Button>
     </form>
   )
 }

@@ -1,3 +1,4 @@
+import { Button } from '@material-ui/core'
 import React, { useState, useImperativeHandle } from 'react'
 
 //eslint doesnt handle forwardRef
@@ -18,14 +19,19 @@ const Toggleable = React.forwardRef((props, ref) => {
     }
   })
 
+  const buttonProps = {
+    size: 'small',
+    variant: 'contained'
+  }
+
   return (
     <div>
       <div style={hideWhenVisible}>
-        <button onClick={toggleVisibility}>{props.buttonLabel}</button>
+        <Button onClick={toggleVisibility} {...buttonProps} color='primary'>{props.buttonLabel}</Button>
       </div>
       <div style={showWhenVisible}>
         {props.children}
-        <button onClick={toggleVisibility}>cancel</button>
+        <Button onClick={toggleVisibility} {...buttonProps} color='secondary'>cancel</Button>
       </div>
     </div>
   )
