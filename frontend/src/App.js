@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Blog from './components/Blog'
 import Login from './components/Login'
@@ -8,8 +8,10 @@ import Toggleable from './components/Toggleable'
 import { changeNotification } from './reducers/notificationReducer'
 import { addBlog, initializeBlogs } from './reducers/blogsReducer'
 import { checkLocal, logout } from './reducers/userReducer'
-import { Switch, Link, Route } from 'react-router-dom'
+import { Switch, Link, Route, useParams, useRouteMatch } from 'react-router-dom'
 import Users from './components/Users'
+import User from './components/User'
+import userService from './services/users'
 
 const App = () => {
 
@@ -31,6 +33,18 @@ const App = () => {
     dispatch(logout())
   }
 
+  const [users, setUsers] = useState([])
+
+  useEffect(() => {
+    userService.getUsers().then( users => setUsers(users))
+  }, [])
+
+
+  const match = useRouteMatch('/users/:id')
+  const selectedUser = match
+    ? users.find(u => u.id === match.params.id)
+    : null
+
   //!!the response from blog creation returns a blog object with the user field not populated
   const createBlog = (blog) => {
     dispatch(addBlog(blog))
@@ -47,8 +61,11 @@ const App = () => {
       <div>{`${user.name} logged in`}</div>
       <button onClick={logoutUser}>Logout</button>
       <Switch>
+        <Route path='/users/:id'>
+          <User user={selectedUser}/>
+        </Route>
         <Route path='/users'>
-          <Users/>
+          <Users users={users}/>
         </Route>
         <Route path='/'>
           <Toggleable
