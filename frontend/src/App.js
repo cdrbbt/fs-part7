@@ -13,6 +13,7 @@ import Users from './components/Users'
 import User from './components/User'
 import userService from './services/users'
 import BlogDetails from './components/BlogDetails'
+import Navigation from './components/Navigation'
 
 const App = () => {
 
@@ -64,6 +65,7 @@ const App = () => {
 
   const blog = () => (
     <>
+      <Navigation/>
       <div>{`${user.name} logged in`}</div>
       <button onClick={logoutUser}>Logout</button>
       <Switch>
