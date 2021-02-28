@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { Link } from 'react-router-dom'
 import { likeBlog, deleteBlog } from '../reducers/blogsReducer'
 import { changeNotification } from '../reducers/notificationReducer'
 
@@ -54,9 +55,7 @@ const Blog = ({ blog }) => {
 
   return (
     <div style={blogStyle} className="blog">
-      {`${blog.title} by ${blog.author}`}
-      <button onClick={changeVisibility} className="visibilityToggle">{label}</button>
-      {details()}
+      <Link to={`/blogs/${blog.id}`}>{`${blog.title} by ${blog.author}`}</Link>
     </div>
   )}
 
