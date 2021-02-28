@@ -46,8 +46,18 @@ blogsRouter.delete('/:id', async (req, res) => {
   return res.status(401).json({error: 'wrong user'})
 })
 
+blogsRouter.post('/:id/comments', async (req, res) => {
+  console.log(req.params.id)
+  const blog = await Blog.findById(req.params.id)
+  console.log(blog)
+  console.log(req.body)
+  blog.comments = blog.comments.concat(req.body.comment)
+  const updatedBlog = await blog.save()
+  res.json(updatedBlog)
+})
+
 blogsRouter.put('/:id', async (req, res) => {
-  const updatedBlog = await Blog.findByIdAndUpdate(req.params.id, {likes: req.body.likes}, {new: true}).populate('user', {username: 1, name: 1})
+  const updatedBlog = await Blog.findById(req.params.id, {likes: req.body.likes}, {new: true}).populate('user', {username: 1, name: 1})
 
   res.json(updatedBlog)
 })

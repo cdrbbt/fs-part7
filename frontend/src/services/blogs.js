@@ -39,4 +39,10 @@ const setToken = (newToken) => {
   token = `bearer ${newToken}`
 }
 
-export default { getAll, create, update, remove, setToken }
+const comment = async (blog, comment) => {
+  const url = baseUrl.concat(`${blog.id}/comments`)
+  const res = await axios.post(url, { comment })
+  return res.data
+}
+
+export default { getAll, create, update, remove, setToken, comment }

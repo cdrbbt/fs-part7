@@ -11,6 +11,7 @@ const reducer = (state = initialBlogs, action) => {
     const updatedBlogs = sortBlogs(state.concat(action.blog))
     return updatedBlogs
   }
+  case 'COMMENT':
   case 'LIKE': {
     const updatedBlogs = state.filter(b => b.id !== action.blog.id).concat(action.blog)
     return sortBlogs(updatedBlogs)
@@ -71,6 +72,16 @@ export const deleteBlog = (blog) => {
     dispatch({
       type: 'DELETE',
       blog
+    })
+  }
+}
+
+export const commentBlog = (blog, comment) =>{
+  return async dispatch => {
+    const updatedBlog = await blogService.comment(blog, comment)
+    dispatch({
+      type: 'COMMENT',
+      blog:updatedBlog
     })
   }
 }
